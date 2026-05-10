@@ -1,0 +1,283 @@
+﻿<Window x:Class="Computer_networks.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Справка по Электронному Учебнику" 
+        Height="718" 
+        Width="967"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        Icon="/images/i (3).ico"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown"
+        KeyDown="Window_KeyDown">
+
+
+    <Window.Resources>
+        <Style TargetType="Border" x:Key="CardStyle">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="SectionHeaderStyle">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,15,0,5"/>
+            <Setter Property="Foreground" Value="#007ACC"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="BodyTextStyle">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#444444"/>
+            <Setter Property="LineHeight" Value="20"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Главный Border с закруглением и тенью -->
+    <Border CornerRadius="20" 
+            Background="#F8F9F9"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.2"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+
+            <!-- Шапка окна (перетаскивание) -->
+            <Border Grid.Row="0" 
+                    Background="#007ACC" 
+                    MouseLeftButtonDown="DragWindow"
+                    CornerRadius="18,18,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" 
+                                Orientation="Horizontal" 
+                                Margin="15,0,0,0"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="❓" 
+                                   FontSize="24" 
+                                   Foreground="White" 
+                                   Margin="0,0,10,0"/>
+                        <TextBlock Text="СПРАВКА ПО УЧЕБНИКУ" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Content="✕"
+                            Click="CloseButton_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Width="50"
+                            Height="50"/>
+                </Grid>
+            </Border>
+
+            <!-- Основной контент -->
+            <Border Grid.Row="1" 
+                    Background="White"
+                    Padding="20">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+
+                        <!-- Введение -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="📘" FontSize="32" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                            <TextBlock Text="Обзор Электронного Учебника"	
+                                       FontSize="24"	
+                                       FontWeight="ExtraBold"	
+                                       Foreground="#007ACC"/>
+                        </StackPanel>
+
+                        <!-- Информационный блок -->
+                        <Border Style="{StaticResource CardStyle}" 
+                                Background="#F8F9F9"
+                                Padding="15" 
+                                Margin="0,0,0,20">
+                            <TextBlock Text="Здесь вы найдете всю необходимую информацию о работе с учебником" 
+                                       FontSize="14" 
+                                       Foreground="#555555" 
+                                       FontWeight="SemiBold"
+                                       TextWrapping="Wrap"/>
+                        </Border>
+
+                        <!-- Разделы справки -->
+                        <Border Style="{StaticResource CardStyle}" 
+                                Background="White"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                Padding="15" 
+                                Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="1. Вкладка «Учебник»" Style="{StaticResource SectionHeaderStyle}"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="Основная вкладка для изучения материалов. Слева - древовидное содержание для навигации, справа - выбранная тема. Используйте кнопки навигации для последовательного изучения."/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" 
+                                Background="White"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                Padding="15" 
+                                Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="2. Навигация и чтение" Style="{StaticResource SectionHeaderStyle}"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="• Кнопки 'Предыдущая'/'Следующая' - для перемещения между темами"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="• Кнопки 'A+'/'A-' - регулировка размера шрифта"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="• '🔖 Закладка' - сохранение важных тем"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" 
+                                Background="White"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                Padding="15" 
+                                Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="3. Поиск по содержанию" Style="{StaticResource SectionHeaderStyle}"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="Поле поиска в верхней панели позволяет находить темы по ключевым словам. Результаты отображаются в реальном времени в дереве содержания."/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" 
+                                Background="White"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                Padding="15" 
+                                Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="4. Прогресс обучения" Style="{StaticResource SectionHeaderStyle}"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="• 🔖 Закладки - быстрый доступ к важным темам"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="• 📊 Статистика - результаты пройденных тестов"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="• 🏆 Достижения - полученные награды"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="• ⚙️ Администрирование - управление контентом (для администраторов)"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" 
+                                Background="White"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                Padding="15" 
+                                Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="5. Система тестирования" Style="{StaticResource SectionHeaderStyle}"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="Выберите тест из списка и нажмите '🚀 Начать тест'. После завершения отображается детальная статистика по результатам."/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" 
+                                Background="White"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                Padding="15" 
+                                Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="6. Достижения и награды" Style="{StaticResource SectionHeaderStyle}"/>
+                                <TextBlock Style="{StaticResource BodyTextStyle}"
+                                           Text="За активное обучение вы получаете достижения с опытом (XP). Чем больше XP, тем выше ваш уровень. Соревнуйтесь с другими в таблице лидеров!"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Горячие клавиши -->
+                        <Border Style="{StaticResource CardStyle}" 
+                                Background="#E8F0FE"
+                                BorderBrush="#007ACC"
+                                BorderThickness="1"
+                                Padding="15" 
+                                Margin="0,0,0,10">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="💡" 
+                                               FontSize="20" 
+                                               Margin="0,0,10,0"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="Горячие клавиши и подсказки" 
+                                               FontSize="16" 
+                                               FontWeight="Bold" 
+                                               Foreground="#007ACC"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <TextBlock Text="• F1 - открыть справку в любое время" 
+                                           FontSize="13" 
+                                           Foreground="#555555"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="• F2 - открыть словарь терминов" 
+                   FontSize="13" 
+                   Foreground="#555555"
+                   Margin="0,0,0,5"/>
+                                <TextBlock Text="• Используйте закладки для пометки важных тем" 
+                                           FontSize="13" 
+                                           Foreground="#555555"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="• Регулируйте размер шрифта для комфортного чтения" 
+                                           FontSize="13" 
+                                           Foreground="#555555"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="• Получайте достижения за активное обучение" 
+                                           FontSize="13" 
+                                           Foreground="#555555"/>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- Нижняя панель с кнопкой -->
+            <Border Grid.Row="2" 
+                    Background="#F0F0F0"
+                    CornerRadius="0,0,18,18"
+                    Padding="20">
+                <StackPanel Orientation="Horizontal" 
+                            HorizontalAlignment="Right">
+                    <Button Content="✕ ЗАКРЫТЬ"
+                            Click="CloseButton_Click"
+                            Background="#007ACC"
+                            Foreground="White"
+                            Padding="25,10"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Width="167" Height="38"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

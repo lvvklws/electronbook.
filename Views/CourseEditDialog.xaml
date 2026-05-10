@@ -1,0 +1,138 @@
+﻿<Window x:Class="Computer_networks.Views.CourseEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Курс"
+        Height="340" Width="460"
+        WindowStartupLocation="CenterOwner"
+        Background="Transparent"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        MouseDown="Window_MouseDown">
+
+    <Border CornerRadius="20"
+            Background="#F8F9F9"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.2"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Шапка -->
+            <Border Grid.Row="0" Background="#007ACC"
+                    CornerRadius="18,18,0,0"
+                    MouseLeftButtonDown="Window_MouseDown">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="TitleText"
+                               Grid.Column="0"
+                               Text="📚 Новый курс"
+                               FontSize="15" FontWeight="Bold"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               Margin="18,0"/>
+                    <Button Grid.Column="1" Content="✕"
+                            Click="Cancel_Click"
+                            Background="Transparent" Foreground="White"
+                            FontSize="18" FontWeight="Bold"
+                            BorderThickness="0" Cursor="Hand"
+                            Width="50" VerticalAlignment="Stretch"/>
+                </Grid>
+            </Border>
+
+            <!-- Содержимое -->
+            <StackPanel Grid.Row="1" Margin="24,20,24,10">
+
+                <TextBlock Text="Название курса *"
+                           FontSize="12" Foreground="#555"
+                           FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <Border BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="6" Background="White">
+                    <TextBox x:Name="NameBox"
+                             Height="36" Padding="10,0"
+                             VerticalContentAlignment="Center"
+                             FontSize="13" BorderThickness="0"
+                             MaxLength="200"/>
+                </Border>
+
+                <TextBlock Text="Описание"
+                           FontSize="12" Foreground="#555"
+                           FontWeight="SemiBold" Margin="0,14,0,5"/>
+                <Border BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="6" Background="White">
+                    <TextBox x:Name="DescriptionBox"
+                             Height="80" Padding="10,8"
+                             FontSize="13" BorderThickness="0"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"
+                             MaxLength="500"/>
+                </Border>
+
+                <!-- Ошибка -->
+                <TextBlock x:Name="ErrorText"
+                           FontSize="12" Foreground="#C62828"
+                           Margin="0,8,0,0"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+            <!-- Кнопки -->
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="24,0,24,20">
+                <Button Content="Отмена"
+                        Click="Cancel_Click"
+                        Width="90" Height="36"
+                        Margin="0,0,10,0"
+                        Background="#F0F0F0"
+                        BorderThickness="1" BorderBrush="#CCC"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6" Padding="10,0">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#E0E0E0"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Content="💾 Сохранить"
+                        Click="Save_Click"
+                        Width="110" Height="36"
+                        Background="#007ACC" Foreground="White"
+                        BorderThickness="0" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="6" Padding="10,0">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#005FA3"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

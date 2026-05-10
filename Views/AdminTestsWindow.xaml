@@ -1,0 +1,422 @@
+﻿<Window x:Class="Computer_networks.Views.AdminTestsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:Computer_networks.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Управление Тестами" 
+        Height="988" 
+        Width="1492" 
+        MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        Icon="/images/i (3).ico"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown"
+        KeyDown="Window_KeyDown">
+
+    <Window.Resources>
+        <views:BoolToOpacityConverter x:Key="OpacityConverter"/>
+
+        <!-- Стиль для кнопок (как в Leaderboard) -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для маленьких кнопок -->
+        <Style x:Key="SmallButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <!-- Стиль для заголовка -->
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="Foreground" Value="#007ACC"/>
+        </Style>
+
+        <!-- Стиль для подзаголовка -->
+        <Style x:Key="SubHeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+        </Style>
+
+        <!-- Стиль для заголовков секций -->
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#007ACC"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <!-- Стиль для ListView -->
+        <Style TargetType="ListView">
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+
+        <!-- Стиль для ListViewItem -->
+        <Style TargetType="ListViewItem">
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#F0F0F0"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E8F0FE"/>
+                    <Setter Property="BorderBrush" Value="#007ACC"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F5F5F5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для TextBox -->
+        <Style TargetType="TextBox">
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <!-- Стиль для ComboBox (как в Leaderboard) -->
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Стиль для GridSplitter -->
+        <Style x:Key="GridSplitterStyle" TargetType="GridSplitter">
+            <Setter Property="Width" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#F0F0F0"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Главный Border с закруглением и тенью (как в Leaderboard) -->
+    <Border CornerRadius="20" 
+            Background="#F8F9F9"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.2"/>
+        </Border.Effect>
+
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Шапка окна (перетаскивание) -->
+            <Border Grid.Row="0" 
+                    Background="#007ACC" 
+                    MouseLeftButtonDown="DragWindow"
+                    CornerRadius="18,18,0,0"
+                    Margin="-20,-20,-20,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" 
+                                Orientation="Horizontal" 
+                                Margin="25,0,0,0"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="📊" 
+                                   FontSize="24" 
+                                   Foreground="White" 
+                                   Margin="0,0,10,0"/>
+                        <TextBlock Text="РЕДАКТОР ТЕСТОВ" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Content="✕"
+                            Click="CloseButton_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Width="50"
+                            Height="50"
+                            ToolTip="Закрыть (Esc)"/>
+                </Grid>
+            </Border>
+
+            <!-- Заголовок и выбор курса -->
+            <Grid Grid.Row="1" Margin="0,20,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="📊 Редактор вопросов и вариантов ответов"
+                           Style="{StaticResource HeaderTextStyle}"/>
+
+                <!-- Выбор курса -->
+                <StackPanel Grid.Column="1" 
+                            Orientation="Horizontal" 
+                            VerticalAlignment="Center">
+                    <TextBlock Text="Курс:" 
+                               Style="{StaticResource SubHeaderTextStyle}"
+                               Margin="0,0,10,0"/>
+                    <ComboBox x:Name="CourseSelector"
+                              Style="{StaticResource ComboBoxStyle}"
+                              Width="200"
+                              DisplayMemberPath="CourseName"
+                              SelectedValuePath="CourseID"
+                              SelectionChanged="CourseSelector_SelectionChanged"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Основной контент -->
+            <Grid Grid.Row="2" Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="350"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Колонка 1: Темы -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Заголовок -->
+                        <RowDefinition Height="*"/>
+                        <!-- ListView (занимает всё доступное место) -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Кнопка (всегда видна внизу) -->
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" 
+               Text="1. Выберите Тему:" 
+               Style="{StaticResource SectionHeaderStyle}"/>
+
+                    <ListView Grid.Row="1"
+              x:Name="TopicsListView"
+              SelectionChanged="TopicsListView_SelectionChanged"
+              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}" 
+                           TextWrapping="Wrap" 
+                           Padding="5,3"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Button Grid.Row="1"
+            x:Name="EditTopicContentButton" 
+            Content="✏️ Редактировать контент темы"
+            Style="{StaticResource ActionButtonStyle}"
+            Background="#555555"
+            Margin="0,666,0,0"
+            Click="EditTopicContentButton_Click" Grid.RowSpan="2"/>
+                </Grid>
+
+                <GridSplitter Grid.Column="1" Style="{StaticResource GridSplitterStyle}"/>
+
+                <!-- Колонка 2: Вопросы -->
+                <Grid Grid.Column="2" Margin="15,0,15,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" 
+               Text="2. Выберите Вопрос:" 
+               Style="{StaticResource SectionHeaderStyle}"/>
+
+                    <ListView Grid.Row="1"
+              x:Name="QuestionsListView"
+              SelectionChanged="QuestionsListView_SelectionChanged"
+              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Text}" 
+                           TextWrapping="Wrap" 
+                           MaxHeight="50" 
+                           Padding="5,3"
+                           Opacity="1.0"
+                           ToolTip="{Binding Text}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <StackPanel Grid.Row="2" 
+                Orientation="Horizontal" 
+                Margin="0,10,0,0">
+                        <Button x:Name="NewQuestionButton" 
+                Content="➕ Новый вопрос"
+                Style="{StaticResource ActionButtonStyle}"
+                Background="#007ACC"
+                Margin="0,0,10,0"
+                Click="NewQuestionButton_Click" Height="43" Width="159"/>
+
+                        <Button x:Name="DeleteQuestionButton" 
+                Content="🗑️ Удалить"
+                Style="{StaticResource ActionButtonStyle}"
+                Background="#CC0000"
+                Click="DeleteQuestionButton_Click" Height="47" Width="153"/>
+                    </StackPanel>
+                </Grid>
+
+                <GridSplitter Grid.Column="3" Style="{StaticResource GridSplitterStyle}"/>
+
+                <!-- Колонка 3: Редактирование -->
+                <Grid Grid.Column="4" Margin="15,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" 
+               Text="3. Редактирование:" 
+               Style="{StaticResource SectionHeaderStyle}"/>
+
+                    <TextBlock Grid.Row="1" 
+               Text="Текст вопроса:" 
+               FontWeight="SemiBold" 
+               Margin="0,0,0,5"
+               Foreground="#333333"/>
+
+                    <TextBox Grid.Row="2"
+             x:Name="QuestionTextTextBox" 
+             TextWrapping="Wrap" 
+             AcceptsReturn="True" 
+             MinHeight="60" 
+             Margin="0,0,0,20"
+             Padding="5"/>
+
+                    <TextBlock Grid.Row="3" 
+               Text="Варианты ответов (отметьте правильный):" 
+               FontWeight="SemiBold" 
+               Margin="0,10,0,5"
+               Foreground="#333333"/>
+
+                    <ListView Grid.Row="4"
+              x:Name="OptionsListView" 
+              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox x:Name="IsCorrectCheckBox"
+                              Grid.Column="0"
+                              IsChecked="{Binding IsCorrect, Mode=TwoWay}"
+                              VerticalAlignment="Center"
+                              Margin="0,0,10,0"
+                              Click="IsCorrectCheckBox_Click"/>
+
+                                    <TextBox Grid.Column="1" 
+                             Text="{Binding Text, Mode=TwoWay}" 
+                             Padding="5"
+                             BorderThickness="1"
+                             BorderBrush="#E0E0E0"/>
+
+                                    <Button Grid.Column="2"
+                            Content="🗑️"
+                            Background="#FF4444"
+                            Foreground="White"
+                            Padding="8,2"
+                            Margin="5,0,0,0"
+                            Style="{StaticResource SmallButtonStyle}"
+                            Click="DeleteOptionButton_Click"
+                            ToolTip="Удалить вариант ответа"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Button Grid.Row="4"
+            x:Name="AddOptionButton" 
+            Content="➕ Добавить вариант"
+            Style="{StaticResource ActionButtonStyle}"
+            Background="#007ACC"
+            Margin="0,529,0,0"
+            Click="AddOptionButton_Click" Grid.RowSpan="2"/>
+                </Grid>
+            </Grid>
+
+            <!-- Нижняя панель -->
+            <Border Grid.Row="3" 
+                    Background="#F0F0F0"
+                    CornerRadius="0,0,18,18"
+                    Margin="-20,-20,-20,-20"
+                    Padding="20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="SaveAllButton" 
+                            Content="💾 Сохранить ВСЕ изменения"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Background="#33AA33"
+                            Width="234"
+                            Margin="0,0,10,0"
+                            Click="SaveAllButton_Click"/>
+                    <Button x:Name="CloseButton" 
+                            Content="✕ Закрыть"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Background="#6C757D"
+                            Width="120"
+                            Click="CloseButton_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,380 @@
+﻿<Window x:Class="Computer_networks.Views.LeaderboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:utilities="clr-namespace:Computer_networks.Utilities"
+        Title="🏆 Таблица лидеров" 
+        Height="923" 
+        Width="908"
+        MinWidth="700"
+        WindowStartupLocation="CenterOwner"
+        Icon="/images/i (3).ico"
+        Background="Transparent"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown"
+        KeyDown="Window_KeyDown">
+
+    <Window.Resources>
+        <utilities:RankToColorConverter x:Key="RankToColorConverter"/>
+        <utilities:RankToMedalVisibility x:Key="RankToMedalVisibility"/>
+        <utilities:RankToBackgroundConverter x:Key="RankToBackgroundConverter"/>
+        <utilities:RankToBorderConverter x:Key="RankToBorderConverter"/>
+        <utilities:RankToBorderThicknessConverter x:Key="RankToBorderThicknessConverter"/>
+
+        <!-- Базовый стиль карточки -->
+        <Style TargetType="Border" x:Key="CardStyle">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.15"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для кнопок -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="25,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <!-- Главный Border с закруглением и тенью -->
+    <Border CornerRadius="20" 
+            Background="#F8F9F9"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.2"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+
+            <!-- Шапка окна (перетаскивание) -->
+            <Border Grid.Row="0" 
+                    Background="#007ACC" 
+                    MouseLeftButtonDown="DragWindow"
+                    CornerRadius="18,18,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" 
+                                Orientation="Horizontal" 
+                                Margin="15,0,0,0"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="🏆" 
+                                   FontSize="24" 
+                                   Foreground="White" 
+                                   Margin="0,0,10,0"/>
+                        <TextBlock Text="ТАБЛИЦА ЛИДЕРОВ" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Content="✕"
+                            Click="CloseButton_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Width="50"
+                            Height="50"
+                            ToolTip="Закрыть (Esc)"/>
+                </Grid>
+            </Border>
+
+            <!-- Информационная панель -->
+            <Border Grid.Row="1" 
+                    Background="White"
+                    Margin="20,20,20,10"
+                    Padding="15"
+                    CornerRadius="8"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <TextBlock Text="📊" FontSize="20" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Всего участников:" FontSize="14" Foreground="#555555" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding TotalParticipants}" FontSize="18" FontWeight="Bold" 
+                                   Foreground="#007ACC" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="Ваше место:" FontSize="14" Foreground="#555555" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding CurrentUserRank, FallbackValue='—'}" FontSize="18" FontWeight="Bold" 
+                                   Foreground="#28A745" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Основной контент -->
+            <Border Grid.Row="2" 
+                    Background="White"
+                    Margin="20,10,20,20"
+                    Padding="0"
+                    CornerRadius="8"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Заголовки колонок -->
+                    <Border Grid.Row="0" 
+                            Background="#F0F0F0" 
+                            Padding="15" 
+                            CornerRadius="8,8,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" 
+                                       Text="Место" 
+                                       FontWeight="Bold" 
+                                       Foreground="#555555"/>
+                            <TextBlock Grid.Column="1" 
+                                       Text="Пользователь" 
+                                       FontWeight="Bold" 
+                                       Foreground="#555555"/>
+                            <TextBlock Grid.Column="2" 
+                                       Text="Уровень" 
+                                       FontWeight="Bold" 
+                                       Foreground="#555555"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" 
+                                       Text="Достижения" 
+                                       FontWeight="Bold" 
+                                       Foreground="#555555"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" 
+                                       Text="Опыт" 
+                                       FontWeight="Bold" 
+                                       Foreground="#555555"
+                                       HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Список лидеров -->
+                    <ScrollViewer Grid.Row="1" 
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  Padding="0">
+                        <ItemsControl x:Name="LeaderboardListBox">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource CardStyle}" 
+                                            Background="{Binding IsCurrentUser, Converter={StaticResource RankToBackgroundConverter}}"
+                                            BorderBrush="{Binding IsCurrentUser, Converter={StaticResource RankToBorderConverter}}"
+                                            BorderThickness="{Binding IsCurrentUser, Converter={StaticResource RankToBorderThicknessConverter}}"
+                                            Margin="0,0,0,2"
+                                            Padding="15">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="70"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="130"/>
+                                                <ColumnDefinition Width="120"/>
+                                                <ColumnDefinition Width="120"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Ранг и медаль -->
+                                            <StackPanel Grid.Column="0" 
+                                                        Orientation="Horizontal"
+                                                        VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Rank}" 
+                                                           FontSize="18" 
+                                                           FontWeight="Bold"
+                                                           Foreground="{Binding Rank, Converter={StaticResource RankToColorConverter}}"/>
+                                                <TextBlock Text="🥇" 
+                                                           FontSize="20" 
+                                                           Margin="5,0,0,0"
+                                                           Visibility="{Binding Rank, Converter={StaticResource RankToMedalVisibility}}"/>
+                                            </StackPanel>
+
+                                            <!-- Имя пользователя + аватар -->
+                                            <StackPanel Grid.Column="1" 
+                                                        Orientation="Horizontal"
+                                                        VerticalAlignment="Center">
+                                                <Border Background="#007ACC"
+                                                        Width="32" Height="32"
+                                                        CornerRadius="16"
+                                                        Margin="0,0,10,0">
+                                                    <TextBlock Text="{Binding Initials}" 
+                                                               FontSize="14"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="White"/>
+                                                </Border>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Username}" 
+                                                               FontSize="16" 
+                                                               FontWeight="SemiBold"
+                                                               Foreground="#2C3E50"/>
+                                                    <TextBlock Text="{Binding FullName}" 
+                                                               FontSize="12"
+                                                               Foreground="#888888"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Уровень + прогресс-бар -->
+                                            <StackPanel Grid.Column="2" 
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding Level, StringFormat=Уровень {0}}" 
+                                                           FontSize="14"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#007ACC"
+                                                           HorizontalAlignment="Center"/>
+                                                <ProgressBar Value="{Binding LevelProgress}" 
+                                                             Maximum="100"
+                                                             Height="4"
+                                                             Width="80"
+                                                             Foreground="#28A745"
+                                                             Background="#E0E0E0"
+                                                             Margin="0,4,0,0"/>
+                                            </StackPanel>
+
+                                            <!-- Достижения (бейдж) -->
+                                            <Border Grid.Column="3" 
+                                                    Background="#E3F2FD"
+                                                    CornerRadius="15"
+                                                    Padding="10,6"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="🏆" Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{Binding AchievementsCount}" 
+                                                               FontSize="14"
+                                                               FontWeight="Bold"
+                                                               Foreground="#007ACC"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- XP (бейдж) -->
+                                            <Border Grid.Column="4" 
+                                                    Background="#E8F5E9"
+                                                    CornerRadius="15"
+                                                    Padding="10,6"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="⚡" Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{Binding TotalXP, StringFormat={}{0:N0}}" 
+                                                               FontSize="14"
+                                                               FontWeight="Bold"
+                                                               Foreground="#28A745"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Нижняя панель с кнопками -->
+            <Border Grid.Row="3" 
+                    Background="#F0F0F0"
+                    CornerRadius="0,0,18,18"
+                    Padding="20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="🏁" FontSize="16" Margin="0,0,5,0"/>
+                        <TextBlock Text="Соревнуйтесь за первое место!" 
+                                   FontSize="13" 
+                                   Foreground="#555555"
+                                   FontStyle="Italic"/>
+                    </StackPanel>
+
+                    <Button
+                            Content="🔄 Обновить"
+                            Click="RefreshButton_Click"
+                            Background="#007ACC"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Margin="566,0,10,0"
+                            ToolTip="Обновить данные" Grid.ColumnSpan="2"/>
+
+                    <Button Grid.Column="2"
+                            Content="✕ Закрыть"
+                            Click="CloseButton_Click"
+                            Background="#6C757D"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Width="120"
+                            ToolTip="Esc - закрыть окно"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

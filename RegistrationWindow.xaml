@@ -1,0 +1,357 @@
+﻿<Window x:Class="Computer_networks.RegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Авторизация / Регистрация"
+        Height="601"
+        Width="482"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        Icon="/images/i (3).ico"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown">
+
+    <Window.Resources>
+
+        <!-- Синяя кнопка — как ContentButtonStyle в MainWindow -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="15,0">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005C99"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.85"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Контурная кнопка — как ToolbarButtonStyle -->
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#007ACC"/>
+            <Setter Property="BorderBrush" Value="#007ACC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                Padding="15,0">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E5F3FF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- TextBox -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- PasswordBox -->
+        <Style TargetType="PasswordBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Подпись поля -->
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="Margin" Value="0,14,0,5"/>
+        </Style>
+
+    </Window.Resources>
+
+    <!-- Главный Border — единый стиль проекта -->
+    <Border CornerRadius="20"
+            Background="#F8F9F9"
+            BorderBrush="#007ACC"
+            BorderThickness="2"
+            Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.2"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Синяя шапка -->
+            <Border Grid.Row="0"
+                    Background="#007ACC"
+                    MouseLeftButtonDown="DragWindow"
+                    CornerRadius="18,18,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="🔑"
+                                   FontSize="18"
+                                   Foreground="White"
+                                   Margin="0,0,10,0"/>
+                        <TextBlock Text="АВТОРИЗАЦИЯ / РЕГИСТРАЦИЯ"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Content="✕"
+                            Click="CloseButton_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Width="50"
+                            Height="50"/>
+                </Grid>
+            </Border>
+
+            <!-- Контент -->
+            <Grid Grid.Row="1" Margin="25,20,25,25">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Заголовок -->
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,18">
+                    <TextBlock Text="🔑"
+                               FontSize="32"
+                               Foreground="#007ACC"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,8"/>
+                    <TextBlock Text="Добро пожаловать"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#007ACC"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Войдите или создайте аккаунт"
+                               FontSize="12"
+                               Foreground="#999999"
+                               HorizontalAlignment="Center"
+                               Margin="0,5,0,0"/>
+                </StackPanel>
+
+                <!-- Карточка с полями -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="22,8,22,20">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.07"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+
+                        <!-- Логин -->
+                        <TextBlock Text="Логин / Email"
+                                   Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox x:Name="LoginTextBox"
+                                 KeyDown="LoginTextBox_KeyDown"
+                                 TextChanged="LoginTextBox_TextChanged"/>
+                        <!-- #14 ИСПРАВЛЕНО: Inline-ошибка вместо MessageBox -->
+                        <TextBlock x:Name="LoginErrorText"
+                                   Foreground="#E53935"
+                                   FontSize="11"
+                                   Margin="2,2,0,4"
+                                   Visibility="Collapsed"/>
+
+                        <!-- Пароль -->
+                        <TextBlock Text="Пароль"
+                                   Style="{StaticResource FieldLabelStyle}"/>
+
+                        <!-- Обёртка поля пароля — рамка + глаз внутри справа -->
+                        <Border BorderBrush="#CCCCCC"
+                                BorderThickness="1"
+                                Background="White"
+                                Height="40">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="38"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Скрытый ввод -->
+                                <PasswordBox x:Name="PasswordBox"
+                                             Grid.Column="0"
+                                             BorderThickness="0"
+                                             Background="Transparent"
+                                             KeyDown="PasswordBox_KeyDown"
+                                             Visibility="Visible"
+                                             Padding="10,0,0,0"
+                                             VerticalContentAlignment="Center"/>
+
+                                <!-- Видимый ввод -->
+                                <TextBox x:Name="VisiblePasswordTextBox"
+                                         Grid.Column="0"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         KeyDown="PasswordBox_KeyDown"
+                                         Visibility="Collapsed"
+                                         Padding="10,0,0,0"
+                                         VerticalContentAlignment="Center"/>
+
+                                <!-- Разделитель между полем и кнопкой -->
+                                <Border Grid.Column="1"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1,0,0,0"/>
+
+                                <!-- Кнопка-глаз с кастомным шаблоном -->
+                                <CheckBox x:Name="ShowPasswordCheckBox"
+                                          Grid.Column="1"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Cursor="Hand"
+                                          Checked="ShowPasswordCheckBox_Checked"
+                                          Unchecked="ShowPasswordCheckBox_Unchecked">
+                                    <CheckBox.Template>
+                                        <ControlTemplate TargetType="CheckBox">
+                                            <Border x:Name="eyeBorder"
+                                                    Width="38" Height="40"
+                                                    Background="Transparent">
+                                                <TextBlock x:Name="eyeIcon"
+                                                           Text="👁"
+                                                           FontSize="15"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Opacity="0.3"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <!-- Пароль скрыт — глаз серый -->
+                                                <Trigger Property="IsChecked" Value="False">
+                                                    <Setter TargetName="eyeIcon" Property="Opacity" Value="0.3"/>
+                                                    <Setter TargetName="eyeBorder" Property="Background" Value="Transparent"/>
+                                                </Trigger>
+                                                <!-- Пароль виден — глаз яркий, фон голубой -->
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter TargetName="eyeIcon" Property="Opacity" Value="1"/>
+                                                    <Setter TargetName="eyeBorder" Property="Background" Value="#E5F3FF"/>
+                                                </Trigger>
+                                                <!-- Hover -->
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="eyeBorder" Property="Background" Value="#F0F7FF"/>
+                                                    <Setter TargetName="eyeIcon" Property="Opacity" Value="0.75"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </CheckBox.Template>
+                                </CheckBox>
+
+                            </Grid>
+                        </Border>
+
+                        <TextBlock Text="Минимум 6 символов, не должен совпадать с логином"
+                                   FontSize="11"
+                                   Foreground="#BBBBBB"
+                                   Margin="0,5,0,0"/>
+                        <!-- #14 ИСПРАВЛЕНО: Inline-ошибка для пароля -->
+                        <TextBlock x:Name="PasswordErrorText"
+                                   Foreground="#E53935"
+                                   FontSize="11"
+                                   Margin="2,2,0,4"
+                                   Visibility="Collapsed"/>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- Кнопки -->
+                <StackPanel Grid.Row="2" Margin="0,16,0,0">
+
+                    <Button Content="➡ Войти в аккаунт"
+                            Click="LoginButton_Click"
+                            Style="{StaticResource PrimaryButtonStyle}"/>
+
+                    <!-- Разделитель "или" -->
+                    <Grid Margin="0,14,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0"
+                                Background="#E0E0E0"
+                                Height="1"
+                                VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1"
+                                   Text="или"
+                                   FontSize="12"
+                                   Foreground="#BBBBBB"
+                                   Margin="12,0"/>
+                        <Border Grid.Column="2"
+                                Background="#E0E0E0"
+                                Height="1"
+                                VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <Button Content="📝 Создать новый аккаунт"
+                            Click="RegisterButton_Click"
+                            Style="{StaticResource SecondaryButtonStyle}"/>
+
+                </StackPanel>
+
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
